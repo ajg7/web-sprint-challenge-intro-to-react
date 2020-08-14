@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from "axios";
+import Character from "./components/Character.js"
 
 const App = () => {
   // Try to think through what state you'll need for this app before starting. Then build out
@@ -10,32 +11,34 @@ const App = () => {
   // side effect in a component, you want to think about which state and/or props it should
   // sync up with, if any.
 
-  const [characterObj, setCharacterObj] = useState(null);
+  const { characters, setCharacters } = useState([]);
 
   useEffect(() => {
     axios.get("https://swapi.dev/api/people/")
     .then(response => {
-      const {name, homeWorld, birthYear, gender, films} = response.data;
-      const characterObj = {
-        name: name,
-        homeWorld: homeWorld,
-        birthYear: birthYear,
-        gender: gender,
-        films: films,
-      }
-      console.log(gender);
-      setCharacterObj(characterObj);
-      console.log(response);
+      const characterArray = response.data.results.map(character => {
+        const characterObj = {
+          name: character.name,
+          homeWorld: character.homeworld,
+          birthYear: character.birth_year,
+          gender: character.gender
+        }
+        return characterObj;
+      })
+      setCharacters(characterArray);
     })
     .catch(error => {
       console.log(error);
     })
   }, [])
 
+  
+
 
   return (
     <div className="App">
       <h1 className="Header">Characters</h1>
+      <Character characters={characters} />
     </div>
   );
 }
