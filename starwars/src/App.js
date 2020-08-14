@@ -26,7 +26,6 @@ const App = () => {
         return characterObj;
       })
       setCharacters(characterArray);
-      console.log(response)
     })
     .catch(error => {
       console.log(error);
